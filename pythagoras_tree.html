@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang = "ru">
+	<head>
+		<meta charset = "utf-8">
+		<link rel = "stylesheet" type = "text/css" href = "pythagoras_tree.css">
+		<title>Дерево Пифагора</title>
+	</head>
+	<body>
+		<section class = "canvas_section">
+			<canvas id = "canvas_id" width = "800" height = "500"></canvas>
+		</section>
+		
+		<section class = "canvas_control">
+			
+			<div class = "control_block">
+				<div class = "simple_text">
+					Состояние: <i><span id = "state_info">Готово.</span></i>
+				</div>
+				<div class = "button_container">
+					<div class = "button">
+						<button type = "button" id = "button_redraw">Перестроить</button>
+					</div>
+					<div class = "padding">
+						
+					</div>
+				</div>
+				<div class = "button_container">
+					<div class = "button">
+						<button type = "button" id = "button_stop">Остановить построение</button>
+					</div>
+					<div class = "padding">
+						
+					</div>
+				</div>
+				<div class = "button_container">
+					<div class = "button">
+						<button type = "button" id = "button_restore_default">Восстановить умолчания</button>
+					</div>
+					<div class = "padding">
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "range control_unit" id = "canvas_width"  data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							Ширина canvas:
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "10" max = "1000" step = "1" value = "800">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+				<div class = "range control_unit" id = "canvas_height"  data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							Высота canvas:
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "10" max = "1000" step = "1" value = "500">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "range control_unit" id = "min_square_len" data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							Минимальная ширина квадрата:
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "0.1" max = "5" step = "0.1" value = "0.1">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+				<div class = "range control_unit" id = "max_rec_depth" data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							Максимальная глубина рекурсии:
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "0" max = "128" step = "1" value = "18">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "text_input">
+					<div class = "text">
+						Паттерн коэффициентов:
+					</div>
+					<div class = "input">
+						<input class = "control_unit control_elem" type = "text" id = "coefs_pattern" data-control-type = "text" value = "10">
+					</div>
+					<div class = "padding">
+						
+					</div>
+				</div>
+				<div class = "range control_unit" id = "coef_a" data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							Коэффициент a:
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "1" max = "100" step = "1" value = "100">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+				<div class = "range control_unit" id = "coef_b" data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							Коэффициент b:
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "1" max = "100" step = "1" value = "68">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "simple_text">
+					Параметры первого квадрата:
+				</div>
+				<div class = "range control_unit" id = "first_square_len" data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							Ширина: 
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "10" max = "500" step = "1" value = "90">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+				<div class = "range control_unit" id = "first_square_x" data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							x:
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "0" max = "1000" step = "1" value = "350">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+				<div class = "range control_unit" id = "first_square_y" data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							y:
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "0" max = "1000" step = "1" value = "1">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+				<div class = "range control_unit" id = "first_square_angle" data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							Угол поворота: 
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "-180" max = "180" step = "1" value = "0">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "text_select">
+					<div class = "text">
+						Тип концов линий: 
+					</div>
+					<div class = "select">
+						<select class = "control_unit" id = "line_cap" data-control-type = "select">
+							<option class = "control_elem" selected value = "butt">butt</option>
+							<option class = "control_elem" value = "round">round</option>
+							<option class = "control_elem" value = "square">square</option>
+						</select>
+					</div>
+					<div class = "padding">
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "simple_text">
+					Настройки толщины линии: 
+				</div>
+				<div class = "small_control_block">
+					<div class = "range control_unit" id = "line_width_1_pos" data-control-type = "range">
+						<div class = "range_row">
+							<div class = "range_cell  cell_00">
+								Глубина рекурсии 1: 
+							</div><div class = "range_cell cell_01">
+								<input class = "control_elem" type = "range" min = "0" max = "128" step = "1" value = "0">
+							</div><div class = "range_cell cell_02">
+								
+							</div>
+						</div>
+						<div class = "range_row">
+							<div class = "range_cell cell_10">
+								
+							</div><div class = "range_cell cell_11">
+								left
+							</div><div class = "range_cell cell_12">
+								
+							</div><div class = "range_cell cell_13">
+								right
+							</div><div class = "range_cell cell_14">
+								
+							</div>
+						</div>
+					</div>
+					<div class = "range control_unit" id = "line_width_1_width" data-control-type = "range">
+						<div class = "range_row">
+							<div class = "range_cell  cell_00">
+								Толщина 1: 
+							</div><div class = "range_cell cell_01">
+								<input class = "control_elem" type = "range" min = "0.1" max = "5" step = "0.1" value = "5">
+							</div><div class = "range_cell cell_02">
+								
+							</div>
+						</div>
+						<div class = "range_row">
+							<div class = "range_cell cell_10">
+								
+							</div><div class = "range_cell cell_11">
+								left
+							</div><div class = "range_cell cell_12">
+								
+							</div><div class = "range_cell cell_13">
+								right
+							</div><div class = "range_cell cell_14">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "small_control_block">
+					<div class = "range control_unit" id = "line_width_2_pos" data-control-type = "range">
+						<div class = "range_row">
+							<div class = "range_cell  cell_00">
+								Глубина рекурсии 2: 
+							</div><div class = "range_cell cell_01">
+								<input class = "control_elem" type = "range" min = "0" max = "128" step = "1" value = "4">
+							</div><div class = "range_cell cell_02">
+								
+							</div>
+						</div>
+						<div class = "range_row">
+							<div class = "range_cell cell_10">
+								
+							</div><div class = "range_cell cell_11">
+								left
+							</div><div class = "range_cell cell_12">
+								
+							</div><div class = "range_cell cell_13">
+								right
+							</div><div class = "range_cell cell_14">
+								
+							</div>
+						</div>
+					</div>
+					<div class = "range control_unit" id = "line_width_2_width" data-control-type = "range">
+						<div class = "range_row">
+							<div class = "range_cell  cell_00">
+								Толщина 2: 
+							</div><div class = "range_cell cell_01">
+								<input class = "control_elem" type = "range" min = "0.1" max = "5" step = "0.1" value = "1">
+							</div><div class = "range_cell cell_02">
+								
+							</div>
+						</div>
+						<div class = "range_row">
+							<div class = "range_cell cell_10">
+								
+							</div><div class = "range_cell cell_11">
+								left
+							</div><div class = "range_cell cell_12">
+								
+							</div><div class = "range_cell cell_13">
+								right
+							</div><div class = "range_cell cell_14">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "small_control_block">
+					<div class = "range control_unit" id = "line_width_3_pos" data-control-type = "range">
+						<div class = "range_row">
+							<div class = "range_cell  cell_00">
+								Глубина рекурсии 3: 
+							</div><div class = "range_cell cell_01">
+								<input class = "control_elem" type = "range" min = "0" max = "128" step = "1" value = "0">
+							</div><div class = "range_cell cell_02">
+								
+							</div>
+						</div>
+						<div class = "range_row">
+							<div class = "range_cell cell_10">
+								
+							</div><div class = "range_cell cell_11">
+								left
+							</div><div class = "range_cell cell_12">
+								
+							</div><div class = "range_cell cell_13">
+								right
+							</div><div class = "range_cell cell_14">
+								
+							</div>
+						</div>
+					</div>
+					<div class = "range control_unit" id = "line_width_3_width" data-control-type = "range">
+						<div class = "range_row">
+							<div class = "range_cell  cell_00">
+								Толщина 3: 
+							</div><div class = "range_cell cell_01">
+								<input class = "control_elem" type = "range" min = "0.1" max = "5" step = "0.1" value = "5">
+							</div><div class = "range_cell cell_02">
+								
+							</div>
+						</div>
+						<div class = "range_row">
+							<div class = "range_cell cell_10">
+								
+							</div><div class = "range_cell cell_11">
+								left
+							</div><div class = "range_cell cell_12">
+								
+							</div><div class = "range_cell cell_13">
+								right
+							</div><div class = "range_cell cell_14">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "simple_text">
+					Настройки цвета линии: 
+				</div>
+				<div class = "small_control_block">
+					<div class = "range control_unit" id = "stroke_style_1_pos" data-control-type = "range">
+						<div class = "range_row">
+							<div class = "range_cell  cell_00">
+								Глубина рекурсии 1: 
+							</div><div class = "range_cell cell_01">
+								<input class = "control_elem" type = "range" min = "0" max = "128" step = "1" value = "0">
+							</div><div class = "range_cell cell_02">
+								
+							</div>
+						</div>
+						<div class = "range_row">
+							<div class = "range_cell cell_10">
+								
+							</div><div class = "range_cell cell_11">
+								left
+							</div><div class = "range_cell cell_12">
+								
+							</div><div class = "range_cell cell_13">
+								right
+							</div><div class = "range_cell cell_14">
+								
+							</div>
+						</div>
+					</div>
+					<div class = "text_input">
+						<div class = "text">
+							Цвет 1: 
+						</div>
+						<div class = "input">
+							<input class = "control_unit control_elem" type = "color" id = "stroke_style_1_color" data-control-type = "color" value = "#32fa32">
+						</div>
+						<div class = "padding">
+							
+						</div>
+					</div>
+				</div>
+				<div class = "small_control_block">
+					<div class = "range control_unit" id = "stroke_style_2_pos" data-control-type = "range">
+						<div class = "range_row">
+							<div class = "range_cell  cell_00">
+								Глубина рекурсии 2: 
+							</div><div class = "range_cell cell_01">
+								<input class = "control_elem" type = "range" min = "0" max = "128" step = "1" value = "15">
+							</div><div class = "range_cell cell_02">
+								
+							</div>
+						</div>
+						<div class = "range_row">
+							<div class = "range_cell cell_10">
+								
+							</div><div class = "range_cell cell_11">
+								left
+							</div><div class = "range_cell cell_12">
+								
+							</div><div class = "range_cell cell_13">
+								right
+							</div><div class = "range_cell cell_14">
+								
+							</div>
+						</div>
+					</div>
+					<div class = "text_input">
+						<div class = "text">
+							Цвет 2: 
+						</div>
+						<div class = "input">
+							<input class = "control_unit control_elem" type = "color" id = "stroke_style_2_color" data-control-type = "color" value = "#E62305">
+						</div>
+						<div class = "padding">
+							
+						</div>
+					</div>
+				</div>
+				<div class = "small_control_block">
+					<div class = "range control_unit" id = "stroke_style_3_pos" data-control-type = "range">
+						<div class = "range_row">
+							<div class = "range_cell  cell_00">
+								Глубина рекурсии 3: 
+							</div><div class = "range_cell cell_01">
+								<input class = "control_elem" type = "range" min = "0" max = "128" step = "1" value = "17">
+							</div><div class = "range_cell cell_02">
+								
+							</div>
+						</div>
+						<div class = "range_row">
+							<div class = "range_cell cell_10">
+								
+							</div><div class = "range_cell cell_11">
+								left
+							</div><div class = "range_cell cell_12">
+								
+							</div><div class = "range_cell cell_13">
+								right
+							</div><div class = "range_cell cell_14">
+								
+							</div>
+						</div>
+					</div>
+					<div class = "text_input">
+						<div class = "text">
+							Цвет 3: 
+						</div>
+						<div class = "input">
+							<input class = "control_unit control_elem" type = "color" id = "stroke_style_3_color" data-control-type = "color" value = "#3737F5">
+						</div>
+						<div class = "padding">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "range control_unit" id = "shadow_blur" data-control-type = "range">
+					<div class = "range_row">
+						<div class = "range_cell  cell_00">
+							Размытие тени: 
+						</div><div class = "range_cell cell_01">
+							<input class = "control_elem" type = "range" min = "0" max = "10" step = "0.25" value = "0">
+						</div><div class = "range_cell cell_02">
+							
+						</div>
+					</div>
+					<div class = "range_row">
+						<div class = "range_cell cell_10">
+							
+						</div><div class = "range_cell cell_11">
+							left
+						</div><div class = "range_cell cell_12">
+							
+						</div><div class = "range_cell cell_13">
+							right
+						</div><div class = "range_cell cell_14">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "text_input">
+					<div class = "text">
+						Цвет тени: 
+					</div>
+					<div class = "input">
+						<input class = "control_unit control_elem" type = "color" id = "shadow_color" data-control-type = "color" value = "#32fa32">
+					</div>
+					<div class = "padding">
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class = "control_block">
+				<div class = "text_input">
+					<div class = "text">
+						Фоновый цвет: 
+					</div>
+					<div class = "input">
+						<input class = "control_unit control_elem" type = "color" id = "background_color" data-control-type = "color" value = "#050505">
+					</div>
+					<div class = "padding">
+						
+					</div>
+				</div>
+			</div>
+			
+		</section>
+		
+		<script defer src = "pythagoras_tree.js"></script>
+	</body>
+</html>
